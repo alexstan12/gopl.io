@@ -9,6 +9,7 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"image/gif"
@@ -18,6 +19,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -48,7 +50,18 @@ func main() {
 	if len(os.Args) > 1 && os.Args[1] == "web" {
 		//!+http
 		handler := func(w http.ResponseWriter, r *http.Request) {
-			lissajous(w)
+			cycles, ok := r.URL.Query()["cycles"]
+			if !ok || len(cycles[0]) < 1 {
+					fmt.Println("something wrong with query param.")
+					lissajous(w, 5)
+			} else {
+					val, err :=  strconv.Atoi(cycles[0])
+					if err!=nil {
+							fmt.Fprintf(os.Stdout, "Parse Int failed, %v", err)
+							lissajous(w, 5)
+					}
+					lissajous(w,val)
+			}																							
 		}
 		http.HandleFunc("/", handler)
 		//!-http
@@ -56,17 +69,17 @@ func main() {
 		return
 	}
 	//!+main
-	lissajous(os.Stdout)
+	lissajous(os.Stdout, 5)
 }
 
-func lissajous(out io.Writer) {
+func lissajous(out io.Writer, inputCycles int) {
 	const (
-		cycles  = 5     // number of complete x oscillator revolutions
 		res     = 0.001 // angular resolution
 		size    = 100   // image canvas covers [-size..+size]
 		nframes = 64    // number of animation frames
 		delay   = 8     // delay between frames in 10ms units
 	)
+	var cycles float64= float64(inputCycles)     // number of complete x oscillator revolutions
 	rand.Seed(time.Now().Unix())
 	freq := rand.Float64() * 3.0 // relative frequency of y oscillator
 	anim := gif.GIF{LoopCount: nframes}
