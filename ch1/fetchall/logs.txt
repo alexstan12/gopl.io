@@ -1,0 +1,14 @@
+0.11s	  20178	http://commoncrawl.org/
+Time elapsed: 0.11s
+0.11s	  20178	http://commoncrawl.org/
+Time elapsed: 0.11s
+0.12s	  20178	http://commoncrawl.org/
+Time elapsed: 0.12s
+0.12s	  20178	http://commoncrawl.org/
+Time elapsed: 0.12s
+0.11s	  20178	http://commoncrawl.org/
+Time elapsed: 0.11s
+0.11s	  20178	http://commoncrawl.org/
+Time elapsed: 0.11s
+0.10s	  20178	http://commoncrawl.org/
+Time elapsed: 0.10s
