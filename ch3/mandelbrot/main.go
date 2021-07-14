@@ -8,6 +8,7 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"image/png"
@@ -20,7 +21,11 @@ func main() {
 		xmin, ymin, xmax, ymax = -2, -2, +2, +2
 		width, height          = 1024, 1024
 	)
-
+	file, err := os.OpenFile("test.png", os.O_RDWR|os.O_CREATE, 0775)
+	if err != nil {
+		fmt.Printf("Could not create/open file: %g", err)
+	}
+	
 	img := image.NewRGBA(image.Rect(0, 0, width, height))
 	for py := 0; py < height; py++ {
 		y := float64(py)/height*(ymax-ymin) + ymin
@@ -31,7 +36,8 @@ func main() {
 			img.Set(px, py, mandelbrot(z))
 		}
 	}
-	png.Encode(os.Stdout, img) // NOTE: ignoring errors
+	png.Encode(file, img) // NOTE: ignoring errors
+	file.Close()
 }
 
 func mandelbrot(z complex128) color.Color {
@@ -42,7 +48,8 @@ func mandelbrot(z complex128) color.Color {
 	for n := uint8(0); n < iterations; n++ {
 		v = v*v + z
 		if cmplx.Abs(v) > 2 {
-			return color.Gray{255 - contrast*n}
+			//return color.Gray{255 - contrast*n}
+			return color.RGBA{255 - contrast*n, 0, 0, 255}
 		}
 	}
 	return color.Black
